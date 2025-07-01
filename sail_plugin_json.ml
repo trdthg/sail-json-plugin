@@ -78,8 +78,9 @@ let json_options =
   [
     ( Flag.create ~prefix:["json"] ~arg:"json_output_dir" "preserve",
       Arg.String (fun dir -> opt_json_output_dir := Some dir),
-      "<directory> set a custom directory to output generated Lean");
+      "<directory> set a custom directory to output generated Json");
   ]
+
 let output_json file ast = print_endline (Pretty_print_json.pp_ast_json ast.defs)
 
 let output files =
@@ -90,8 +91,11 @@ let output files =
     )
     files
 
+let pre_parse_hook = fun () ->
+  ()
+
 let json_target out_file { ctx; ast; effect_info; env; _ } =
   let out_file = match out_file with Some f -> f | None -> "out" in
   output [(out_file, ctx, effect_info, env, ast)]
 
-let _ = Target.register ~name:"json" ~options:json_options ~asserts_termination:true json_target
+let _ = Target.register ~name:"json" ~options:json_options ~pre_parse_hook ~asserts_termination:true json_target
