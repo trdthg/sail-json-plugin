@@ -81,26 +81,14 @@ let json_options =
       "<directory> set a custom directory to output generated Json");
   ]
 
-let output_json out_file ast =
-  let res = Pretty_print_json.pp_ast_json ast.defs in
-  let out_chan = open_out (Printf.sprintf "%s.json" out_file) in
-  output_string out_chan res;
-  flush out_chan;
-  close_out out_chan
-
-let output files =
-  List.iter
-    (fun (f, ctx, effect_info, env, ast) ->
-      let f' = Filename.basename (Filename.remove_extension f) in
-      output_json f' ast
-    )
-    files
-
 let pre_parse_hook = fun () ->
   ()
 
 let json_target out_file { ctx; ast; effect_info; env; _ } =
-  let out_file = match out_file with Some f -> f | None -> "out" in
-  output [(out_file, ctx, effect_info, env, ast)]
+  let close, out_chan = match out_file with Some f -> (true, open_out (f ^ ".json")) | None -> (false, stdout) in
+  let res = Pretty_print_json.pp_ast_json ast.defs in
+  output_string out_chan res;
+  flush out_chan;
+  if close then close_out out_chan
 
 let _ = Target.register ~name:"json" ~options:json_options ~pre_parse_hook ~asserts_termination:true json_target

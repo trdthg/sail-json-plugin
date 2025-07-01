@@ -563,18 +563,6 @@ let json_of_prec = function
   | InfixL -> json_of_string "InfixL"
   | InfixR -> json_of_string "InfixR"
 
-(* module Attribute_data = struct
-  type attribute_data_aux =
-    | AD_object of (string * attribute_data) list
-    | AD_list of attribute_data list
-    | AD_num of Big_int.num
-    | AD_string of string
-    | AD_bool of bool
-
-  (** JSON-style data structure for attributes *)
-  and attribute_data = AD_aux of attribute_data_aux * l
-end *)
-
 let json_of_pragma = function
   | Pragma_line (s, l) -> sprintf "{\"Pragma_line\": [%s]}" (json_of_string s)
   | Pragma_structured l -> sprintf "{\"Pragma_structured\": [%s]}" (json_of_list (fun (s, _) -> sprintf "%s" s) l)

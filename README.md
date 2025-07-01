@@ -1,4 +1,4 @@
-# isla-sail
+# sail-json-plugin
 
 A sail plugin to convert sail to json.
 
