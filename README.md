@@ -12,6 +12,6 @@ A sail plugin to convert sail to json.
 
 ## Usage
 
-`sail --json xxx.sail`
+`sail --json -o xxx xxx.sail`
 
 

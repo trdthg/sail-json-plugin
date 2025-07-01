@@ -81,7 +81,12 @@ let json_options =
       "<directory> set a custom directory to output generated Json");
   ]
 
-let output_json file ast = print_endline (Pretty_print_json.pp_ast_json ast.defs)
+let output_json out_file ast =
+  let res = Pretty_print_json.pp_ast_json ast.defs in
+  let out_chan = open_out (Printf.sprintf "%s.json" out_file) in
+  output_string out_chan res;
+  flush out_chan;
+  close_out out_chan
 
 let output files =
   List.iter
